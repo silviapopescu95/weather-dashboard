@@ -35,7 +35,7 @@
                     </form>
   
                     <!-- We'll be dumping our JSON contents in here -->
-                    <div id="movie-view"></div>
+                    <!-- <div id="movie-view"></div> -->
 
                   <!-- Create an HTML form to handle the inputs
                   <form id="search-form"> -->
@@ -58,13 +58,34 @@
               </div>
         </div>
 
-        <div class="card">
+        <!-- card for current data-->
+        <div class="card" id="current-city-data">
+            
             <div class="card-body" id="current-city-data"></div>
         </div>
 
-        <div class="card">
-            <div class="card-body" id="five-day"></div>
+        <!-- card for five day forecast-->
+        <!-- <div class="card">
+            <div class="card-body" id="five-day-forecast"></div>
+        </div> -->
+
+        <div class="card-deck" id="card-deck">
+            <!-- <div class="card text-white bg-primary mb-3">
+              <div class="card-body" id="day-one-forecast-goes-here">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is this first card in a deck. Need to figure out how to make the rest.</p>
+                
+              </div>
+            </div> -->
         </div>
+
+
+
+
+
+
+
+
 
     </div>
 
@@ -74,5 +95,7 @@
     <script src="https://code.jquery.com/jquery.js"></script>
     <!-- link to JavaScript file -->
     <script src="script.js"></script>
+    <!-- Link to Moment.js to get today's date-->
+    <script src="https://momentjs.com/downloads/moment-with-locales.js"></script>  
 </body>
 </html>
