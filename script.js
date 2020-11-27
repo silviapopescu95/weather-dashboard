@@ -77,7 +77,7 @@ $(document).ready(function() {
                 
                 // Creates variable for icon and creates element to store it
                 var iconURL = "http://openweathermap.org/img/w/" + loopResponse.weather[0].icon + ".png";
-                var displayIcon = $("<img>").attr("src", iconURL);
+                var displayIcon = $("<img>").attr("src", iconURL).css("width", "64px").css("height", "64px");
 
                 // Creates temperature variable, converts from Kelvin to Fahrhenheit and element to store it in
                 var fiveDayTemp = $("<p>").text("Temp: " + ((loopResponse.main.temp - 273.15) * 1.80 + 32).toFixed(1));
@@ -87,15 +87,16 @@ $(document).ready(function() {
 
 
                 //Create a card for each iteration
-                cardCreate = $("<div>").addClass("card text-white bg-primary mb-3").attr("id", "one-card");
+                var cardCreate = $("<div>").addClass("card text-white bg-primary mb-3").attr("id", "one-card");
                 // Append to the deck
                 $("#card-deck").append(cardCreate);
-                // Now we make the body of the card, that will hold our data. Adding id and class
-                cardBodyCreate = $("<div>").addClass("card-body").attr("id", "daily-forecast");
+                // Create card-body, that will hold our data. Adding id and class
+                var cardBodyCreate = $("<div>").addClass("card-body").attr("id", "daily-forecast");
                 // here we target the first card div by the id we gave it of "one-card", and append the cardbody to it
                 $("#one-card").append(cardBodyCreate);
                 // Then we target the card body by the id we gave it of daily-forecast, and append all of our data to it
-                $("#daily-forecast").append(formatDate, displayIcon, fiveDayTemp, fiveDayHumidity);
+                cardCreate.append(formatDate, displayIcon, fiveDayTemp, fiveDayHumidity);
+                
             }
         });
     });
