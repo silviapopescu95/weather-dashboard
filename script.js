@@ -3,7 +3,7 @@ $(document).ready(function() {
     // To trigger the AJAX call
     $("#search-city").on("click", function(event) {
         event.preventDefault();
-
+       
         //Gets the text from city input box
         var city = $("#city-input").val();
 
@@ -12,12 +12,32 @@ $(document).ready(function() {
 
         // Building the URL to query the database
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
+        
+        // Passes query URL into search AJAX call
+        searchCity(queryURL);
+
+          // Storing previous search history
+          var recentSearchButton = $(`<button>`).text(city);
+          $("#recent-search").append(recentSearchButton);
+          $("#recent-search button").on("click", function() {
+            event.preventDefault();
+
+            var APIKey = "e0c3e9cab48d34d878451828cf2fdc20";
+            var buttonText = $(this).text().trim();
+            var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + buttonText + "&appid=" + APIKey;
+            searchCity(queryURL);
+          });
 
         // AJAX call for current conditions
-        $.ajax({
+        function searchCity(queryURL) 
+        { $.ajax({
             url: queryURL,
             method: "GET"
         }).then(function(response) {
+             // Clears previous city data
+            $("#current-city-data").empty();
+            $("#card-deck").empty();
+
             //console log to see what the information stored in object
             console.log(queryURL);
             console.log(response);
@@ -34,6 +54,7 @@ $(document).ready(function() {
 
             // Retrieves temperature in Kelvin and converts to Fahrenheit
             var tempF = (response.main.temp - 273.15) * 1.80 + 32;
+
             // Creates an element to hold tempF, rounding to one decimal place
             var temperature = $("<p>").text("Temperature: " + tempF.toFixed(1));
 
@@ -45,12 +66,33 @@ $(document).ready(function() {
 
             //Creates variable for UV index and element to store it
             var uvURL = "http://api.openweathermap.org/data/2.5/uvi?lat=" + response.coord.lat + "&lon=" + response.coord.lat + "&appid=" + APIKey;
-            var uvIndex = $("<p>").text("UV Index: " + uvURL);
-            console.log(uvIndex);
+            getUV(uvURL);
 
             // Appends current data to card created in HTML
-            $("#current-city-data").append(cityDisplay, todayIcon, today, temperature, humidity, windSpeed, uvIndex);
+            $("#current-city-data").append(cityDisplay, todayIcon, today, temperature, humidity, windSpeed);
         });
+    }
+        
+       function getUV(queryURL) { 
+           $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function(response) {
+            console.log(response);
+            var uvIndex = $("<p>").text("UV Index: " + response.value);
+            
+            // Adding color to UV Index based on value from response
+            if (response.value <= 3) {
+                uvIndex.addClass("green");
+            } else if (response.value <= 6) {
+                uvIndex.addClass("yellow");                
+            } else {
+                uvIndex.addClass("red");
+            }
+
+            $("#current-city-data").append(uvIndex);
+        });
+        }
 
         // Create variable for five day forecast URL
         var fiveDayURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + APIKey;
@@ -88,15 +130,12 @@ $(document).ready(function() {
 
                 //Create a card for each iteration
                 var cardCreate = $("<div>").addClass("card text-white bg-primary mb-3").attr("id", "one-card");
+
                 // Append to the deck
                 $("#card-deck").append(cardCreate);
-                // Create card-body, that will hold our data. Adding id and class
-                var cardBodyCreate = $("<div>").addClass("card-body").attr("id", "daily-forecast");
-                // here we target the first card div by the id we gave it of "one-card", and append the cardbody to it
-                $("#one-card").append(cardBodyCreate);
+
                 // Then we target the card body by the id we gave it of daily-forecast, and append all of our data to it
                 cardCreate.append(formatDate, displayIcon, fiveDayTemp, fiveDayHumidity);
-                
             }
         });
     });

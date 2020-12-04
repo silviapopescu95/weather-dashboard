@@ -1,4 +1,19 @@
-#search {
-    display: flexbox;
-    align-content: left;
+#current-city-data {
+    padding: 20px;
+}
+
+#one-card {
+    padding: 2px;
+}
+
+.green {
+    color: green;
+}
+
+.yellow {
+    color: #ffae42;
+}
+
+.red {
+    color: red;
 }
